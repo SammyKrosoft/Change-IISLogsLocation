@@ -29,7 +29,7 @@ If ($SetIIS){
             Write-Host "Changing IIS Logpath of server $Computer to $logdir" -BackgroundColor Yellow -ForegroundColor Blue
             #Putting the whole expression into a string variable to invoke it later. Reason: the variable used $LogDir will be valid only inside the -ScriptBlock, and cannot be set before.
             # Workaround is to save the whole command line into a string variable, and any variable within the string variable will be replaced with the value we want before invoke-command is even executed.
-            # example: $Logdir is set earlier in the script, and will be replaced by its value within the "$Expression" string variable.
+            # example: $Logdir is set earlier in the script, and will be replaced by its value within the "$Expression" string variable before even being executed.
             $Expression = "Invoke-command -ComputerName $Computer -ScriptBlock {Set-WebConfigurationProperty `"/system.applicationHost/sites/siteDefaults`" -name logfile.directory -value $Logdir}"
         }
         Write-Host "Executing the following command:" -ForegroundColor Green
