@@ -2,10 +2,14 @@
 
 param(
     [parameter(ParameterSetName="GetInfo")][switch]$GetIIS,
-    [parameter(ParameterSetName="SetInfo")][switch]$SetIIS,
+    [parameter(ParameterSetName="SetInfo")]
+    [parameter(ParameterSetName="SetDefault")]
+    [switch]$SetIIS,
+    [parameter(ParameterSetName="SetDefault")][switch]$DefaultLocation,
     [Parameter(ParameterSetName="SetInfo")][string]$NewLogLocation = "c:\IISLogsNewLocation",
     [Parameter(ParameterSetName="SetInfo")]
     [Parameter(ParameterSetName="GetInfo")]
+    [Parameter(ParameterSetName="SetDefault")]
     [string[]]$Computers = @("E2016-01", "E2016-02")
 
 
@@ -25,7 +29,9 @@ $DefaultLogLocation = "$($env:SystemDrive)\inetpub\logs\LogFile"
 Import-Module WebAdministration
 
 If ($SetIIS){
-    [string]$Logdir = $NewLogLocation
+    If ($DefaultLocation){$Logdir = $DefaultLogLocation} Else {
+        [string]$Logdir = $NewLogLocation
+        }
     ForEach ($Computer in $Computers){
         Write-Host "Changing IIS Logpath of server $Computer to $logdir" -BackgroundColor Yellow -ForegroundColor Blue
         #Putting the whole expression into a string variable to invoke it later. Reason: the variable used $LogDir will be valid only inside the -ScriptBlock, and cannot be set before.
