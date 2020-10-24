@@ -1,3 +1,33 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.GUID 09fecba8-b9c0-4d20-b0cb-cf9c45fc1032
+
+.AUTHOR SK
+
+.COMPANYNAME Microsoft Canada
+
+.COPYRIGHT Oct 2020 - feel free to re-use, enhance, adapt, etc...
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+#>
+
 <#
 .DESCRIPTION 
  Check or change IIS Logs location 
