@@ -1,5 +1,23 @@
-[CmdletBinding(DefaultParameterSetName="GetInfo")]
+<#
+.DESCRIPTION 
+ Check or change IIS Logs location 
 
+.EXAMPLE
+.\IISLocation.ps1 -GetIIS -Computers "Computer01", "Computer02"
+Dumps the IIS log directory location for the computers specified
+
+.EXAMPLE
+.\IISLocation.ps1 -SetIIS -NewLocation D:\IISLogs -Computers "Computer01","Computer02"
+Sets IIS log directory location to D:\IISLogs for the computers specified
+
+.EXAMPLE
+.\IISLocation.ps1 -SetIIS -DefaultLocation -Computers "Computer01","Computer02"
+Sets the IIS Log directory to the default one, using the SystemDrive environment variable of the remote computer to get the SystemDrive environment variable of each remote computer
+as if we were local.
+
+#> 
+
+[CmdletBinding(DefaultParameterSetName="GetInfo")]
 param(
     [parameter(ParameterSetName="GetInfo")][switch]$GetIIS,
     [parameter(ParameterSetName="SetInfo")]
@@ -10,17 +28,18 @@ param(
     [Parameter(ParameterSetName="SetInfo")]
     [Parameter(ParameterSetName="GetInfo")]
     [Parameter(ParameterSetName="SetDefault")]
-    [string[]]$Computers = @("E2016-01", "E2016-02")
-
-
+    [string[]]$Computers
 )
 
 Import-Module WebAdministration
 
+If (!($Computers)){
+    $Computers = "$Env:COMPUTERNAME"
+}
+
 If ($SetIIS){
     ForEach ($Computer in $Computers){
-        
-       
+               
         If ($DefaultLocation){
             Write-Host "Changing IIS Logpath of server $Computer to %SystemDrive%\inetpub\logs\logfile using remote computer environment variable" -BackgroundColor Yellow -ForegroundColor Blue
             $Expression = "Invoke-command -ComputerName $Computer -ScriptBlock {`$DefaultIISFolder=`"`$([Environment]::GetEnvironmentVariable(`"SystemDrive`"))\inetpub\logs\LogFile`";Set-WebConfigurationProperty `"/system.applicationHost/sites/siteDefaults`" -name logfile.directory -value `$DefaultIISFolder}"
